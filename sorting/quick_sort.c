@@ -1,32 +1,59 @@
 #include <stdio.h>
 
-void swap(int* a, int* b) {
-    int t = *a;
-    *a = *b;
-    *b = t;
+void printArray(int *A, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        printf("%d ", A[i]);
+    }
+    printf("\n");
 }
 
-int partition(int arr[], int low, int high) {
-    int pivot = arr[high];
-    int i = (low - 1);
-    for (int j = low; j <= high - 1; j++) {
-        if (arr[j] < pivot) {
+int partition(int A[], int low, int high)
+{
+    int pivot = A[low];
+    int i = low + 1;
+    int j = high;
+    int temp;
+
+    do
+    {
+        while (A[i] <= pivot)
+        {
             i++;
-            swap(&arr[i], &arr[j]);
         }
-    }
-    swap(&arr[i + 1], &arr[high]);
-    return (i + 1);
+
+        while (A[j] > pivot)
+        {
+            j--;
+        }
+
+        if (i < j)
+        {
+            temp = A[i];
+            A[i] = A[j];
+            A[j] = temp;
+        }
+    } while (i < j);
+
+    // Swap A[low] and A[j]
+    temp = A[low];
+    A[low] = A[j];
+    A[j] = temp;
+    return j;
 }
 
-void quickSort(int arr[], int low, int high) {
-    if (low < high) {
-        int pi = partition(arr, low, high);
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
+void quickSort(int A[], int low, int high)
+{
+    int partitionIndex; // Index of pivot after partition
+
+    if (low < high)
+    {
+        partitionIndex = partition(A, low, high); 
+        quickSort(A, low, partitionIndex - 1);  // sort left subarray 
+        quickSort(A, partitionIndex + 1, high); // sort right subarray
     }
 }
-
 int main() {
     int n;
     printf("Enter the number of elements: ");
@@ -44,3 +71,4 @@ int main() {
     }
     return 0;
 }
+
